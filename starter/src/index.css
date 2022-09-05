@@ -28,7 +28,8 @@ body {
   padding: 20px;
   box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
   display: flex;
-  justify-content: space-evenly;
+  flex-wrap: wrap;               /*  added  */
+  align-content: flex-start;
 }
 
 .score-section {
@@ -72,6 +73,10 @@ body {
   flex-direction: column;
   justify-content: space-between;
 }
+.next-question-section {
+  width: 100%;
+  display: block;
+}
 
 button {
   width: 100%;
@@ -85,6 +90,22 @@ button {
   align-items: center;
   border: 5px solid #234668;
   cursor: pointer;
+  margin: 5px 0px
+}
+
+.next-button {
+  width: 100%;
+  font-size: 16px;
+  color: #ffffff;
+  background-color: #252d4a;
+  border-radius: 15px;
+  display: flex;
+  padding: 5px;
+  justify-content: flex-end;
+  align-items: center;
+  border: 5px solid #234668;
+  cursor: pointer;
+  margin: 5px 0px
 }
 
 .correct {

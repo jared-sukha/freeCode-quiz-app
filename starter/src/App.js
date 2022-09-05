@@ -46,17 +46,20 @@ export default function App() {
   const [score, setScore] = useState(0);
 
   const handleAnswerClick = (isCorrect) =>{
-    const nextQuestion = currentQuestion + 1;
     if (isCorrect) {
       setScore(score + 1)
     }
+  }
+
+  const handleNextQuestionClick = () => {
+    const nextQuestion = currentQuestion + 1;
     if(nextQuestion < questions.length){
       setCurrentQuestion(nextQuestion)
     } else{
       setShowScore(true)
     }
   }
-
+  
   return (
     <div className="app">
       {/* HINT: replace "false" with logic to display the 
@@ -77,6 +80,10 @@ export default function App() {
             {questions[currentQuestion].answerOptions.map((answer, i) => (
               <button onClick={()=>handleAnswerClick(answer.isCorrect)}>{answer.answerText}</button>
             ))}
+            
+          </div>
+          <div className="next-question-section">
+          <button onClick={()=>handleNextQuestionClick()}className="next-button">Next Question</button>
           </div>
         </>
       )}
