@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { getTheQuotes } from './ApiClient';
 
 export default function App() {
 
@@ -46,19 +47,26 @@ export default function App() {
   const [score, setScore] = useState(0);
 
   const handleAnswerClick = (isCorrect) =>{
-    if (isCorrect) {
-      setScore(score + 1)
-    }
-  }
-
-  const handleNextQuestionClick = () => {
     const nextQuestion = currentQuestion + 1;
+    getTheQuotes()
     if(nextQuestion < questions.length){
       setCurrentQuestion(nextQuestion)
     } else{
       setShowScore(true)
     }
+    if (isCorrect) {
+      setScore(score + 1)
+    }
   }
+
+  // const handleNextQuestionClick = () => {
+  //   const nextQuestion = currentQuestion + 1;
+  //   if(nextQuestion < questions.length){
+  //     setCurrentQuestion(nextQuestion)
+  //   } else{
+  //     setShowScore(true)
+  //   }
+  // }
   
   return (
     <div className="app">
@@ -82,9 +90,9 @@ export default function App() {
             ))}
             
           </div>
-          <div className="next-question-section">
+          {/* <div className="next-question-section">
           <button onClick={()=>handleNextQuestionClick()}className="next-button">Next Question</button>
-          </div>
+          </div> */}
         </>
       )}
     </div>
