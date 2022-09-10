@@ -46,6 +46,8 @@ body {
 
 .question-count {
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .question-count span {
