@@ -43,7 +43,7 @@ export default function App() {
 
   // TODO
   // Will need useEffect to render inital random quotes (logic defined in ApiClient.js)
-  // Also need to decide how answers will work, Answers will return string array of character names
+  // Also need to decide how answers will work, Answers will return random string array of character names (including answer) so will need to refer to questions and their character answers, to make sure answer is included in answer array.
 
   const [questions, setQuestions] = useState([
     {
