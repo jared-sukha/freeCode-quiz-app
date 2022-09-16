@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getTheQuotes } from './ApiClient'
+import { getPonchoQuotes } from './ApiClient'
 
 export default function App() {
   // TODO
@@ -14,7 +14,7 @@ export default function App() {
   ])
 
   useEffect(() => {
-    getTheQuotes().then((qArr) => {
+    getPonchoQuotes().then((qArr) => {
       setQuestions(qArr)
     })
   }, [])
@@ -47,7 +47,7 @@ export default function App() {
 
   const handleAnswerClick = (isCorrect) => {
     const nextQuestion = currentQuestion + 1
-    getTheQuotes()
+    // getTheQuotes()
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion)
     } else {
