@@ -13,21 +13,6 @@ export function getRandomQuotes() {
   return request
     .get('https://predator-quotes.herokuapp.com/quotes/all')
     .then((res) => {
-      console.log(res.body)
-      return res.body
-    })
-}
-
-// let arr = []
-// while(arr.length < 3){
-//   let r = res.body[Math.floor(Math.random() * arr.length)];
-//   if(arr.indexOf(r) === -1) arr.push(r);
-// }
-
-export function getPonchoQuotes() {
-  return request
-    .get('https://predator-quotes.herokuapp.com/quotes/all')
-    .then((res) => {
       let sourceQuotes = res.body
       let randomQuestArr = []
       while (randomQuestArr.length < 4) {
@@ -37,5 +22,16 @@ export function getPonchoQuotes() {
       // console.log(res.body[Math.floor(Math.random() * res.body.length)])
       console.log(randomQuestArr)
       return randomQuestArr
+    })
+
+}
+
+
+export function getPonchoQuotes() {
+  return request
+    .get('https://predator-quotes.herokuapp.com/quotes/bycharacter/poncho')
+    .then((res) => {
+      console.log(res.body)
+      return res.body
     })
 }

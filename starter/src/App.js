@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { getPonchoQuotes } from './ApiClient'
+import { getRandomQuotes } from './ApiClient'
 
 export default function App() {
   // TODO
   // Will need useEffect to render inital random quotes (logic defined in ApiClient.js)
   // Also need to decide how answers will work, Answers will return random string array of character names (including answer) so will need to refer to questions and their character answers, to make sure answer is included in answer array.
+
+  const [answers, setAnswers] = useState([
+    'Loading...'
+  ])
 
   const [questions, setQuestions] = useState([
     {
@@ -14,9 +18,15 @@ export default function App() {
   ])
 
   useEffect(() => {
-    getPonchoQuotes().then((qArr) => {
+    getRandomQuotes()
+    .then((qArr) => {
       setQuestions(qArr)
-    })
+      setAnswers(qArr)
+      })
+    // .then((qArr) =>{
+    //   setAnswers(qArr)
+    // })
+    
   }, [])
 
   // [
@@ -39,7 +49,7 @@ export default function App() {
   //   }
   // ]
 
-  const answers = ['Dutch', 'Dillon', 'Blain', 'Billy']
+  const hardAnswers = ['Dutch', 'Dillon', 'Blain', 'Billy']
 
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [showScore, setShowScore] = useState(false)
@@ -48,6 +58,8 @@ export default function App() {
   const handleAnswerClick = (isCorrect) => {
     const nextQuestion = currentQuestion + 1
     // getTheQuotes()
+    console.log('answers', answers)
+    console.log('qs', questions)
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion)
     } else {
@@ -95,11 +107,11 @@ export default function App() {
                 key={i}
                 onClick={() =>
                   handleAnswerClick(
-                    answer === questions[currentQuestion].character
+                    answer.character === questions[currentQuestion].character
                   )
                 }
               >
-                {answer}{' '}
+                {answer.character}
               </button>
             ))}
           </div>
