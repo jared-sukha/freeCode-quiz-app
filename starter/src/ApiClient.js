@@ -35,3 +35,12 @@ export function getPonchoQuotes() {
       return res.body
     })
 }
+
+export function getUniqueCharacters(){
+  return request
+  .get('https://predator-quotes.herokuapp.com/quotes/all')
+  .then((res) => {
+    const uniqueChars = res.body.map((x) => x.character).filter((char, index, charArr) => charArr.indexOf(char) === index)
+    return uniqueChars
+  })
+}

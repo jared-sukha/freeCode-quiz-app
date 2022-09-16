@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getRandomQuotes } from './ApiClient'
+import { getRandomQuotes, getUniqueCharacters } from './ApiClient'
 
 export default function App() {
   // TODO
@@ -19,10 +19,15 @@ export default function App() {
 
   useEffect(() => {
     getRandomQuotes()
-    .then((qArr) => {
-      setQuestions(qArr)
-      setAnswers(qArr)
+    .then((randomQuestArr) => {
+      setQuestions(randomQuestArr)
+      
       })
+
+    getUniqueCharacters()
+    .then((charArr) => {
+      setAnswers(charArr)
+    })  
     // .then((qArr) =>{
     //   setAnswers(qArr)
     // })
@@ -60,6 +65,7 @@ export default function App() {
     // getTheQuotes()
     console.log('answers', answers)
     console.log('qs', questions)
+    console.log()
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion)
     } else {
@@ -107,11 +113,11 @@ export default function App() {
                 key={i}
                 onClick={() =>
                   handleAnswerClick(
-                    answer.character === questions[currentQuestion].character
+                    answer === questions[currentQuestion].character
                   )
                 }
               >
-                {answer.character}
+                {answer}
               </button>
             ))}
           </div>
