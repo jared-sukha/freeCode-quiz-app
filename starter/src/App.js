@@ -6,9 +6,7 @@ export default function App() {
   // Will need useEffect to render inital random quotes (logic defined in ApiClient.js)
   // Also need to decide how answers will work, Answers will return random string array of character names (including answer) so will need to refer to questions and their character answers, to make sure answer is included in answer array.
 
-  const [answers, setAnswers] = useState([
-    'Loading...'
-  ])
+  const [answers, setAnswers] = useState(['Loading...'])
 
   const [questions, setQuestions] = useState([
     {
@@ -18,20 +16,27 @@ export default function App() {
   ])
 
   useEffect(() => {
-    getRandomQuotes()
-    .then((randomQuestArr) => {
+    getRandomQuotes().then((randomQuestArr) => {
       setQuestions(randomQuestArr)
-      
-      })
+    })
 
-    getUniqueCharacters()
-    .then((charArr) => {
-      setAnswers(charArr)
-    })  
+    getUniqueCharacters().then((charArr) => {
+      setAnswers(ansArr(charArr))
+      function ansArr(charArr) {
+        let sourceAnswers =charArr
+        let randomAnsArr = []
+        while (randomAnsArr.length < 4) {
+          let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
+          if (randomAnsArr.indexOf(r) === -1) randomAnsArr.push(r)
+        }
+        // console.log(res.body[Math.floor(Math.random() * res.body.length)])
+        console.log(randomAnsArr)
+        return randomAnsArr
+      }
+    })
     // .then((qArr) =>{
     //   setAnswers(qArr)
     // })
-    
   }, [])
 
   // [
