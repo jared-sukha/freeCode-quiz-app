@@ -15,6 +15,8 @@ export default function App() {
     },
   ])
 
+
+
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [showScore, setShowScore] = useState(false)
   const [score, setScore] = useState(0)
@@ -22,31 +24,34 @@ export default function App() {
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
       setQuestions(randomQuestArr)
+
     })
 
-    
   }, [])
 
+
+
   useEffect(()=>{
+    function ansArr(charArr) {
+      let sourceAnswers = charArr
+      let randomAnsArr = []
+      while (randomAnsArr.length < 4) {
+        let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
+        if (randomAnsArr.indexOf(r) === -1) randomAnsArr.push(r)
+      }
+      // console.log(res.body[Math.floor(Math.random() * res.body.length)])
+      // console.log(randomAnsArr)
+      
+      return randomAnsArr
+    }
     getUniqueCharacters().then((charArr) => {
       setAnswers(ansArr(charArr))
-      function ansArr(charArr) {
-        let sourceAnswers = charArr
-        let randomAnsArr = [questions[0].character]
-        while (randomAnsArr.length < 4) {
-          let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
-          if (randomAnsArr.indexOf(r) === -1) randomAnsArr.push(r)
-        }
-        // console.log(res.body[Math.floor(Math.random() * res.body.length)])
-        console.log(randomAnsArr)
-        console.log('quest', questions)
-        return randomAnsArr
-      }
+      
     })
     // .then((qArr) =>{
     //   setAnswers(qArr)
     // })
-  }, [currentQuestion])
+  },[currentQuestion])
 
   // [
   //   {

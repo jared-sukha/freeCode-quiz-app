@@ -20,7 +20,7 @@ export function getRandomQuotes() {
         if (randomQuestArr.indexOf(r) === -1) randomQuestArr.push(r)
       }
       // console.log(res.body[Math.floor(Math.random() * res.body.length)])
-      console.log(randomQuestArr)
+      // console.log('random', randomQuestArr)
       return randomQuestArr
     })
 
