@@ -15,8 +15,6 @@ export default function App() {
     },
   ])
 
-
-
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [showScore, setShowScore] = useState(false)
   const [score, setScore] = useState(0)
@@ -24,83 +22,54 @@ export default function App() {
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
       setQuestions(randomQuestArr)
-
     })
-
   }, [])
 
+  //TODO When do the UseEffects Mount? At the moment, both render on DOM load, BUT have an issue when questions is used as dependency
 
-
-  useEffect(()=>{
+  useEffect(() => {
+    // console.log('qqqqq', questions)
     function ansArr(charArr) {
       let sourceAnswers = charArr
-      let randomAnsArr = []
+      let randomAnsArr = [questions[0].character]
       while (randomAnsArr.length < 4) {
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
         if (randomAnsArr.indexOf(r) === -1) randomAnsArr.push(r)
       }
       // console.log(res.body[Math.floor(Math.random() * res.body.length)])
       // console.log(randomAnsArr)
-      
+
       return randomAnsArr
     }
     getUniqueCharacters().then((charArr) => {
       setAnswers(ansArr(charArr))
-      
     })
-    // .then((qArr) =>{
-    //   setAnswers(qArr)
-    // })
-  },[currentQuestion])
-
-  // [
-  //   {
-  //     quote:
-  //       "This stuff'll make you a goddamn sexual tyrannosaurus... just like me.",
-  //     character: 'Blain',
-  //   },
-  //   {
-  //     quote: 'Payback time.',
-  //     character: 'Blain',
-  //   },
-  //   {
-  //     quote: "You lose it here, you're in a world of hurt.",
-  //     character: 'Blain',
-  //   },
-  //   {
-  //     quote: 'Makes Cambodia look like Kansas.',
-  //     character: 'Blain',
-  //   }
-  // ]
-
-  // const hardAnswers = ['Dutch', 'Dillon', 'Blain', 'Billy']
-
-
+  }, [currentQuestion])
 
   const handleAnswerClick = (isCorrect) => {
-    const nextQuestion = currentQuestion + 1
-    // getTheQuotes()
-    console.log('answers', answers)
-    console.log('qs', questions)
-    console.log()
-    if (nextQuestion < questions.length) {
-      setCurrentQuestion(nextQuestion)
-    } else {
-      setShowScore(true)
-    }
+    // const nextQuestion = currentQuestion + 1
+    // // getTheQuotes()
+    // console.log('answers', answers)
+    // console.log('qs', questions)
+    // console.log()
+    // if (nextQuestion < questions.length) {
+    //   setCurrentQuestion(nextQuestion)
+    // } else {
+    //   setShowScore(true)
+    // }
     if (isCorrect) {
       setScore(score + 1)
     }
   }
 
-  // const handleNextQuestionClick = () => {
-  //   const nextQuestion = currentQuestion + 1;
-  //   if(nextQuestion < questions.length){
-  //     setCurrentQuestion(nextQuestion)
-  //   } else{
-  //     setShowScore(true)
-  //   }
-  // }
+  const handleNextQuestionClick = () => {
+    const nextQuestion = currentQuestion + 1;
+    if(nextQuestion < questions.length){
+      setCurrentQuestion(nextQuestion)
+    } else{
+      setShowScore(true)
+    }
+  }
 
   return (
     <div className="app">
@@ -138,9 +107,9 @@ export default function App() {
               </button>
             ))}
           </div>
-          {/* <div className="next-question-section">
+          <div className="next-question-section">
           <button onClick={()=>handleNextQuestionClick()}className="next-button">Next Question</button>
-          </div> */}
+          </div>
         </>
       )}
     </div>
