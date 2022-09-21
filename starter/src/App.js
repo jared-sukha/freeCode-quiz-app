@@ -31,20 +31,20 @@ export default function App() {
     // console.log('qqqqq', questions)
     function ansArr(charArr) {
       let sourceAnswers = charArr
-      let randomAnsArr = [questions[0].character]
-      while (randomAnsArr.length < 4) {
+      let orderedAnsArr = [questions[currentQuestion].character]
+      while (orderedAnsArr.length < 4) {
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
-        if (randomAnsArr.indexOf(r) === -1) randomAnsArr.push(r)
+        if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
       }
       // console.log(res.body[Math.floor(Math.random() * res.body.length)])
       // console.log(randomAnsArr)
 
-      return randomAnsArr
+      return orderedAnsArr
     }
     getUniqueCharacters().then((charArr) => {
       setAnswers(ansArr(charArr))
     })
-  }, [currentQuestion])
+  }, [questions,currentQuestion])
 
   const handleAnswerClick = (isCorrect) => {
     // const nextQuestion = currentQuestion + 1
