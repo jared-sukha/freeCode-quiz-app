@@ -26,7 +26,6 @@ export function getRandomQuotes() {
 
 }
 
-
 export function getPonchoQuotes() {
   return request
     .get('https://predator-quotes.herokuapp.com/quotes/bycharacter/poncho')

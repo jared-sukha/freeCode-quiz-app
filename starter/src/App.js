@@ -18,6 +18,8 @@ export default function App() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [showScore, setShowScore] = useState(false)
   const [score, setScore] = useState(0)
+  const [showNextQuestion,setShowNextQuestion] = useState(false)
+
 
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
@@ -39,7 +41,7 @@ export default function App() {
       // console.log(res.body[Math.floor(Math.random() * res.body.length)])
       // console.log(randomAnsArr)
 
-      return orderedAnsArr
+      return orderedAnsArr.sort(() => Math.random() - 0.5)
     }
     getUniqueCharacters().then((charArr) => {
       setAnswers(ansArr(charArr))
@@ -60,15 +62,21 @@ export default function App() {
     if (isCorrect) {
       setScore(score + 1)
     }
+    if (currentQuestion+1 !== questions.length){
+      setShowNextQuestion(true)
+    } else {
+      setShowNextQuestion(false)
+      setShowScore(true)
+    }
   }
+
 
   const handleNextQuestionClick = () => {
     const nextQuestion = currentQuestion + 1;
+    setShowNextQuestion(false)
     if(nextQuestion < questions.length){
       setCurrentQuestion(nextQuestion)
-    } else{
-      setShowScore(true)
-    }
+    } 
   }
 
   return (
@@ -107,9 +115,9 @@ export default function App() {
               </button>
             ))}
           </div>
-          <div className="next-question-section">
+          {showNextQuestion && <div className="next-question-section">
           <button onClick={()=>handleNextQuestionClick()}className="next-button">Next Question</button>
-          </div>
+          </div>}
         </>
       )}
     </div>
