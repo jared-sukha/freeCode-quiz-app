@@ -19,7 +19,7 @@ export default function App() {
   const [showScore, setShowScore] = useState(false)
   const [score, setScore] = useState(0)
   const [showNextQuestion, setShowNextQuestion] = useState(false)
-  const [colour, setColour] = useState(false)
+  const [colourChange, setColourChange] = useState(false)
 
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
@@ -61,7 +61,7 @@ export default function App() {
     // }
     if (isCorrect) {
       setScore(score + 1)
-      setColour(!colour)
+      setColourChange(!colourChange)
     }
     if (currentQuestion+1 !== questions.length){
       setShowNextQuestion(true)
@@ -75,6 +75,7 @@ export default function App() {
   const handleNextQuestionClick = () => {
     const nextQuestion = currentQuestion + 1;
     setShowNextQuestion(false)
+    setColourChange(false)
     if(nextQuestion < questions.length){
       setCurrentQuestion(nextQuestion)
     } 
@@ -104,7 +105,7 @@ export default function App() {
           </div>
           <div className="answer-section">
             {answers.map((answer, i) => (
-              <button 
+              <button className={'button ' + (colourChange && answer === questions[currentQuestion].character? 'correct':'')}
                 key={i}
                 onClick={() =>
                   handleAnswerClick(
