@@ -5,7 +5,7 @@ export default function App() {
   // TODO
   // Will need useEffect to render inital random quotes (logic defined in ApiClient.js)
   // Also need to decide how answers will work, Answers will return random string array of character names (including answer) so will need to refer to questions and their character answers, to make sure answer is included in answer array.
-
+  // const buttonRef = useRef(null);
   const [answers, setAnswers] = useState(['Loading...'])
 
   const [questions, setQuestions] = useState([
@@ -20,6 +20,7 @@ export default function App() {
   const [score, setScore] = useState(0)
   const [showNextQuestion, setShowNextQuestion] = useState(false)
   const [colourChange, setColourChange] = useState(false)
+  const [disable, setDisable] = useState(false);
 
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
@@ -27,13 +28,12 @@ export default function App() {
     })
   }, [])
 
-  //TODO Investigate loading for unique characters, I 
+  //TODO Investigate loading for unique characters, I
 
   useEffect(() => {
-    // console.log('qqqqq', questions)
     function ansArr(charArr) {
       let sourceAnswers = charArr
-      let orderedAnsArr = [questions[currentQuestion].character]
+      let orderedAnsArr = [questions[currentQuestion].character, 'Jared']
       while (orderedAnsArr.length < 4) {
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
         if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
@@ -43,14 +43,16 @@ export default function App() {
     getUniqueCharacters().then((charArr) => {
       setAnswers(ansArr(charArr))
     })
-  }, [questions,currentQuestion])
+  }, [questions, currentQuestion])
 
-  const handleAnswerClick = (answer) => {
-    setColourChange(!colourChange)
-    if (answer  === questions[currentQuestion].character) {
+
+  const handleAnswerClick = (answer, evt) => {
+    setDisable(true)
+    setColourChange(true)
+    if (answer === questions[currentQuestion].character) {
       setScore(score + 1)
     }
-    if (currentQuestion + 1 < questions.length){
+    if (currentQuestion + 1 < questions.length) {
       setShowNextQuestion(true)
     } else {
       setShowNextQuestion(false)
@@ -58,14 +60,15 @@ export default function App() {
     }
   }
 
-
   const handleNextQuestionClick = () => {
-    const nextQuestion = currentQuestion + 1;
+    // buttonRef.current.disabled = false;
+    setDisable(false)
+    const nextQuestion = currentQuestion + 1
     setShowNextQuestion(false)
     setColourChange(false)
-    if(nextQuestion < questions.length){
+    if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion)
-    } 
+    }
   }
 
   return (
@@ -90,21 +93,34 @@ export default function App() {
           </div>
           <div className="answer-section">
             {answers.map((answer, i) => (
-              <button className={'button ' + (colourChange && answer === questions[currentQuestion].character? 'correct':'')}
-                key={i}
-                onClick={() =>
-                  handleAnswerClick(
-                    answer
-                  )
+              <button
+              disabled={disable}
+                className={
+                  'button ' +
+                  (colourChange &&
+                  answer === questions[currentQuestion].character
+                    ? 'correct'
+                    : colourChange && answer === 'Jared'
+                    ? 'incorrect'
+                    : '')
                 }
+                key={i}
+                onClick={(evt) => handleAnswerClick(answer, evt)}
               >
                 {answer}
               </button>
             ))}
           </div>
-          {showNextQuestion && <div className="next-question-section">
-          <button onClick={()=>handleNextQuestionClick()}className="next-button">Next Question</button>
-          </div>}
+          {showNextQuestion && (
+            <div className="next-question-section">
+              <button
+                onClick={() => handleNextQuestionClick()}
+                className="next-button"
+              >
+                Next Question
+              </button>
+            </div>
+          )}
         </>
       )}
     </div>
