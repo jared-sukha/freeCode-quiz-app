@@ -27,7 +27,7 @@ export default function App() {
     })
   }, [])
 
-  //TODO When do the UseEffects Mount? At the moment, both render on DOM load, BUT have an issue when questions is used as dependency
+  //TODO Investigate loading for unique characters, I 
 
   useEffect(() => {
     // console.log('qqqqq', questions)
@@ -38,9 +38,6 @@ export default function App() {
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
         if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
       }
-      // console.log(res.body[Math.floor(Math.random() * res.body.length)])
-      // console.log(randomAnsArr)
-
       return orderedAnsArr.sort(() => Math.random() - 0.5)
     }
     getUniqueCharacters().then((charArr) => {
@@ -48,22 +45,12 @@ export default function App() {
     })
   }, [questions,currentQuestion])
 
-  const handleAnswerClick = (isCorrect) => {
-    // const nextQuestion = currentQuestion + 1
-    // // getTheQuotes()
-    // console.log('answers', answers)
-    // console.log('qs', questions)
-    // console.log()
-    // if (nextQuestion < questions.length) {
-    //   setCurrentQuestion(nextQuestion)
-    // } else {
-    //   setShowScore(true)
-    // }
-    if (isCorrect) {
+  const handleAnswerClick = (answer) => {
+    setColourChange(!colourChange)
+    if (answer  === questions[currentQuestion].character) {
       setScore(score + 1)
-      setColourChange(!colourChange)
     }
-    if (currentQuestion+1 !== questions.length){
+    if (currentQuestion + 1 < questions.length){
       setShowNextQuestion(true)
     } else {
       setShowNextQuestion(false)
@@ -83,8 +70,6 @@ export default function App() {
 
   return (
     <div className="app">
-      {/* HINT: replace "false" with logic to display the 
-      score when the user has answered all the questions */}
       {showScore ? (
         <div className="score-section">
           You scored {score} out of {questions.length}
@@ -109,7 +94,7 @@ export default function App() {
                 key={i}
                 onClick={() =>
                   handleAnswerClick(
-                    answer === questions[currentQuestion].character
+                    answer
                   )
                 }
               >
