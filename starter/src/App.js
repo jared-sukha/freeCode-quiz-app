@@ -3,9 +3,7 @@ import { getRandomQuotes, getUniqueCharacters } from './ApiClient'
 
 export default function App() {
   // TODO
-  // Will need useEffect to render inital random quotes (logic defined in ApiClient.js)
-  // Also need to decide how answers will work, Answers will return random string array of character names (including answer) so will need to refer to questions and their character answers, to make sure answer is included in answer array.
-  // const buttonRef = useRef(null);
+ 
   const [answers, setAnswers] = useState(['Loading...'])
 
   const [questions, setQuestions] = useState([
@@ -29,7 +27,8 @@ export default function App() {
     })
   }, [])
 
-  //TODO Investigate loading for unique characters, I
+// TODO UseEffect is loading twice
+// introduce replay button
 
   useEffect(() => {
     function ansArr(charArr) {
@@ -76,11 +75,16 @@ export default function App() {
     }
   }
 
+  function refreshPage() {
+    window.location.reload(true);
+  }
+
   return (
     <div className="app">
       {showScore ? (
         <div className="score-section">
           You scored {score} out of {questions.length}
+          <button onClick={refreshPage}>Replay?</button>
         </div>
       ) : (
         <>
