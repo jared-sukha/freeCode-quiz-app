@@ -21,6 +21,7 @@ export default function App() {
   const [showNextQuestion, setShowNextQuestion] = useState(false)
   const [colourChange, setColourChange] = useState(false)
   const [disable, setDisable] = useState(false);
+  const [theTarget, setTheTarget] = useState('');
 
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
@@ -33,7 +34,7 @@ export default function App() {
   useEffect(() => {
     function ansArr(charArr) {
       let sourceAnswers = charArr
-      let orderedAnsArr = [questions[currentQuestion].character, 'Jared']
+      let orderedAnsArr = [questions[currentQuestion].character]
       while (orderedAnsArr.length < 4) {
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
         if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
@@ -48,6 +49,10 @@ export default function App() {
 
   const handleAnswerClick = (answer, evt) => {
     setDisable(true)
+    console.log(evt.target.innerText)
+    if (evt.target.innerText !==questions[currentQuestion].character){
+      setTheTarget(evt.target.innerText)
+    }
     setColourChange(true)
     if (answer === questions[currentQuestion].character) {
       setScore(score + 1)
@@ -100,7 +105,7 @@ export default function App() {
                   (colourChange &&
                   answer === questions[currentQuestion].character
                     ? 'correct'
-                    : colourChange && answer === 'Jared'
+                    : colourChange && answer === theTarget
                     ? 'incorrect'
                     : '')
                 }
