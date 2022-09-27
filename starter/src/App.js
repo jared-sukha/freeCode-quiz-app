@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { getRandomQuotes, getUniqueCharacters } from './ApiClient'
 
 export default function App() {
-  // TODO
- 
   const [answers, setAnswers] = useState(['Loading...'])
+  const [uniqueCharsAnswers, setUniqueCharsAnswers] = useState([])
 
   const [questions, setQuestions] = useState([
     {
@@ -17,24 +16,51 @@ export default function App() {
   const [showScore, setShowScore] = useState(false)
   const [score, setScore] = useState(0)
   const [showNextQuestion, setShowNextQuestion] = useState(false)
+  const [showScoreButton, setshowScoreButton] = useState(false)
   const [colourChange, setColourChange] = useState(false)
-  const [disable, setDisable] = useState(false);
-  const [theTarget, setTheTarget] = useState('');
+  const [disable, setDisable] = useState(false)
+  const [theTarget, setTheTarget] = useState('')
 
   useEffect(() => {
     getRandomQuotes().then((randomQuestArr) => {
       setQuestions(randomQuestArr)
+      console.log(randomQuestArr)
+    })
+    getUniqueCharacters().then((uniqueCharArr) => {
+      setUniqueCharsAnswers(uniqueCharArr)
+      console.log(uniqueCharArr)
     })
   }, [])
 
-// TODO UseEffect is loading twice
-// introduce replay button
+  // TODO UseEffect is loading twice!!!!
+
+  // useEffect(() => {
+  //   let orderedAnsArr = [questions[currentQuestion].character]
+  //   console.log('iniitial', orderedAnsArr)
+  // }, [questions])
+
+  // useEffect(() => {
+  //   function ansArr(charArr) {
+  //     let orderedAnsArr = []
+  //     // console.log('iniitial', orderedAnsArr)
+
+  //     while (orderedAnsArr.length < 4) {
+  //       console.log(orderedAnsArr)
+
+  //       let r = charArr[Math.floor(Math.random() * charArr.length)]
+  //       if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
+  //     }
+  //     return orderedAnsArr.sort(() => Math.random() - 0.5)
+  //   }
+  //   setAnswers(ansArr)
+  // }, [currentQuestion])
 
   useEffect(() => {
     function ansArr(charArr) {
       let sourceAnswers = charArr
       let orderedAnsArr = [questions[currentQuestion].character]
       while (orderedAnsArr.length < 4) {
+        console.log(orderedAnsArr)
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
         if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
       }
@@ -45,11 +71,10 @@ export default function App() {
     })
   }, [questions, currentQuestion])
 
-
   const handleAnswerClick = (answer, evt) => {
     setDisable(true)
     console.log(evt.target.innerText)
-    if (evt.target.innerText !==questions[currentQuestion].character){
+    if (evt.target.innerText !== questions[currentQuestion].character) {
       setTheTarget(evt.target.innerText)
     }
     setColourChange(true)
@@ -58,14 +83,16 @@ export default function App() {
     }
     if (currentQuestion + 1 < questions.length) {
       setShowNextQuestion(true)
-    } else {
+    } else if (currentQuestion + 1 === questions.length) {
+      setshowScoreButton(true)
+    } 
+    else {
       setShowNextQuestion(false)
-      setShowScore(true)
     }
+    
   }
 
   const handleNextQuestionClick = () => {
-    // buttonRef.current.disabled = false;
     setDisable(false)
     const nextQuestion = currentQuestion + 1
     setShowNextQuestion(false)
@@ -73,10 +100,16 @@ export default function App() {
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion)
     }
+
+  }
+
+  const handleEndGameClick = () => {
+    setShowScore(true)
+
   }
 
   function refreshPage() {
-    window.location.reload(true);
+    window.location.reload(true)
   }
 
   return (
@@ -103,7 +136,7 @@ export default function App() {
           <div className="answer-section">
             {answers.map((answer, i) => (
               <button
-              disabled={disable}
+                disabled={disable}
                 className={
                   'button ' +
                   (colourChange &&
@@ -127,6 +160,16 @@ export default function App() {
                 className="next-button"
               >
                 Next Question
+              </button>
+            </div>
+          )}
+          {showScoreButton && (
+            <div className="next-question-section">
+              <button
+                onClick={() => handleEndGameClick()}
+                className="next-button"
+              >
+                Show Scores?
               </button>
             </div>
           )}
