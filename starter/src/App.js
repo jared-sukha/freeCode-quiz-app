@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { getRandomQuotes, getUniqueCharacters } from './ApiClient'
 
 export default function App() {
+  const quoteNum = 4
+  const answerNum = 4
+
   const [answers, setAnswers] = useState(['Loading...'])
-  const [uniqueCharsAnswers, setUniqueCharsAnswers] = useState([])
+  // const [uniqueCharsAnswers, setUniqueCharsAnswers] = useState([])
 
   const [questions, setQuestions] = useState([
     {
@@ -22,16 +25,14 @@ export default function App() {
   const [theTarget, setTheTarget] = useState('')
 
   useEffect(() => {
-    getRandomQuotes().then((randomQuestArr) => {
+    getRandomQuotes(quoteNum).then((randomQuestArr) => {
       setQuestions(randomQuestArr)
-      console.log(randomQuestArr)
     })
-    getUniqueCharacters().then((uniqueCharArr) => {
-      setUniqueCharsAnswers(uniqueCharArr)
-      console.log(uniqueCharArr)
-    })
+    // getUniqueCharacters().then((uniqueCharArr) => {
+    //   setUniqueCharsAnswers(uniqueCharArr)
+    //   console.log(uniqueCharArr)
+    // })
   }, [])
-
   // TODO UseEffect is loading twice!!!!
 
   // useEffect(() => {
@@ -59,7 +60,7 @@ export default function App() {
     function ansArr(charArr) {
       let sourceAnswers = charArr
       let orderedAnsArr = [questions[currentQuestion].character]
-      while (orderedAnsArr.length < 4) {
+      while (orderedAnsArr.length < answerNum) {
         console.log(orderedAnsArr)
         let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
         if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
@@ -70,6 +71,10 @@ export default function App() {
       setAnswers(ansArr(charArr))
     })
   }, [questions, currentQuestion])
+
+  useEffect(()=>{
+    console.log('useEffect Hook ran',questions)
+  },[questions])
 
   const handleAnswerClick = (answer, evt) => {
     setDisable(true)
@@ -85,11 +90,9 @@ export default function App() {
       setShowNextQuestion(true)
     } else if (currentQuestion + 1 === questions.length) {
       setshowScoreButton(true)
-    } 
-    else {
+    } else {
       setShowNextQuestion(false)
     }
-    
   }
 
   const handleNextQuestionClick = () => {
@@ -100,18 +103,17 @@ export default function App() {
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion)
     }
-
   }
 
   const handleEndGameClick = () => {
     setShowScore(true)
-
   }
 
   function refreshPage() {
     window.location.reload(true)
   }
-
+  // console.log(questions)
+  // console.log(currentQuestion)
   return (
     <div className="app">
       {showScore ? (
@@ -125,12 +127,11 @@ export default function App() {
             <div className="question-count">
               <span>Who said it?</span>
               <span>
-                {' '}
                 {currentQuestion + 1}/{questions.length}
               </span>
             </div>
             <div className="question-text">
-              {questions[currentQuestion].quote}
+              "{questions[currentQuestion].quote}"
             </div>
           </div>
           <div className="answer-section">

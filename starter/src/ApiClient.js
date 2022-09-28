@@ -9,13 +9,13 @@ export function getTheQuotes() {
     })
 }
 
-export function getRandomQuotes() {
+export function getRandomQuotes(quoteNum) {
   return request
     .get('https://predator-quotes.herokuapp.com/quotes/all')
     .then((res) => {
       let sourceQuotes = res.body
       let randomQuestArr = []
-      while (randomQuestArr.length < 4) {
+      while (randomQuestArr.length < quoteNum) {
         let r = sourceQuotes[Math.floor(Math.random() * sourceQuotes.length)]
         if (randomQuestArr.indexOf(r) === -1) randomQuestArr.push(r)
       }
