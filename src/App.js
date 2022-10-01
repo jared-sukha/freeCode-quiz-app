@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { getRandomQuotes, getUniqueCharacters } from './ApiClient'
 
 export default function App() {
-  const quoteNum = 4
-  const answerNum = 4
+  
+  const QUOTE_NUM = 4
+  //NOTE: Maximum allowable unique answers is 7 will crash if >7 (Quotes only exist for 7 different characters)
+  const ANSWER_NUM = 4
 
   const [answers, setAnswers] = useState(['Loading...'])
   // const [uniqueCharsAnswers, setUniqueCharsAnswers] = useState([])
@@ -25,9 +27,29 @@ export default function App() {
   const [theTarget, setTheTarget] = useState('')
 
   useEffect(() => {
-    getRandomQuotes(quoteNum).then((randomQuestArr) => {
+
+    function ansArr(charArr,randomQuestArr) {
+      let sourceAnswers = charArr
+      let orderedAnsArr = [randomQuestArr[0].character]
+      while (orderedAnsArr.length < ANSWER_NUM) {
+        let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
+        if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
+      }
+      return orderedAnsArr.sort(() => Math.random() - 0.5)
+    }
+
+    getRandomQuotes(QUOTE_NUM).then((randomQuestArr) => {
       setQuestions(randomQuestArr)
+      console.log('char', randomQuestArr[0].character)
+      return randomQuestArr
+    }).then(randomQuestArr =>{
+      getUniqueCharacters().then((charArr) => {
+        setAnswers(ansArr(charArr,randomQuestArr))
+        // console.log(randomQuestArr)
+      })
+      console.log('data', randomQuestArr)
     })
+    
     // getUniqueCharacters().then((uniqueCharArr) => {
     //   setUniqueCharsAnswers(uniqueCharArr)
     //   console.log(uniqueCharArr)
@@ -56,25 +78,25 @@ export default function App() {
   //   setAnswers(ansArr)
   // }, [currentQuestion])
 
-  useEffect(() => {
-    function ansArr(charArr) {
-      let sourceAnswers = charArr
-      let orderedAnsArr = [questions[currentQuestion].character]
-      while (orderedAnsArr.length < answerNum) {
-        console.log(orderedAnsArr)
-        let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
-        if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
-      }
-      return orderedAnsArr.sort(() => Math.random() - 0.5)
-    }
-    getUniqueCharacters().then((charArr) => {
-      setAnswers(ansArr(charArr))
-    })
-  }, [questions, currentQuestion])
+  // useEffect(() => {
+  //   function ansArr(charArr) {
+  //     let sourceAnswers = charArr
+  //     let orderedAnsArr = [questions[currentQuestion].character]
+  //     while (orderedAnsArr.length < ANSWER_NUM) {
+  //       console.log(orderedAnsArr)
+  //       let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
+  //       if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
+  //     }
+  //     return orderedAnsArr.sort(() => Math.random() - 0.5)
+  //   }
+  //   getUniqueCharacters().then((charArr) => {
+  //     setAnswers(ansArr(charArr))
+  //   })
+  // }, [questions,currentQuestion])
 
-  useEffect(()=>{
-    console.log('useEffect Hook ran',questions)
-  },[questions])
+  // useEffect(()=>{
+  //   console.log('useEffect Hook ran',questions)
+  // },[questions])
 
   const handleAnswerClick = (answer, evt) => {
     setDisable(true)
