@@ -7,7 +7,7 @@ export default function App() {
   //NOTE: Maximum allowable unique answers is 7 will crash if >7 (Quotes only exist for 7 different characters)
   const ANSWER_NUM = 4
 
-  const [answers, setAnswers] = useState(['Loading...'])
+  const [answers, setAnswers] = useState([['Loading...','Loading...','Loading...','Loading...']])
   // const [uniqueCharsAnswers, setUniqueCharsAnswers] = useState([])
 
   const [questions, setQuestions] = useState([
@@ -26,28 +26,45 @@ export default function App() {
   const [disable, setDisable] = useState(false)
   const [theTarget, setTheTarget] = useState('')
 
+  const newAnsArray = [['Jared1','Jared2','Jared3','Jared4'],['Horse1','Horse2','Horse3','Horse4'],['Camel1','Camel2','Camel3','Camel4'],['Kernel1','Kernel2','Kernel3','Kernel4']]
+  
   useEffect(() => {
 
     function ansArr(charArr,randomQuestArr) {
-      let sourceAnswers = charArr
-      let orderedAnsArr = [randomQuestArr[0].character]
-      while (orderedAnsArr.length < ANSWER_NUM) {
-        let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
-        if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
+      let newFandangledArr = []
+      for(let i = 0; i < QUOTE_NUM;i++){
+
+        let sourceAnswers = charArr
+        let orderedAnsArr = [randomQuestArr[i].character]
+        while (orderedAnsArr.length < ANSWER_NUM) {
+          let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
+          if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
+        }
+        let randomAnsArr = orderedAnsArr.sort(() => Math.random() - 0.5)
+        newFandangledArr.push(randomAnsArr)
       }
-      return orderedAnsArr.sort(() => Math.random() - 0.5)
+      console.log(newFandangledArr)
+      return newFandangledArr
+      // for(let i = 0; i < ANSWER_NUM; i++){
+      //   let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
+      //     if (orderedAnsArr.indexOf(r) === -1){ 
+      //     orderedAnsArr.push(r)
+      //     }
+      //     console.log(orderedAnsArr)
+      // }
+      // return orderedAnsArr.sort(() => Math.random() - 0.5)
     }
 
     getRandomQuotes(QUOTE_NUM).then((randomQuestArr) => {
       setQuestions(randomQuestArr)
-      console.log('char', randomQuestArr[0].character)
+      console.log('char answer', randomQuestArr[0].character)
       return randomQuestArr
     }).then(randomQuestArr =>{
       getUniqueCharacters().then((charArr) => {
+        
         setAnswers(ansArr(charArr,randomQuestArr))
-        // console.log(randomQuestArr)
       })
-      console.log('data', randomQuestArr)
+      console.log('Question Arr', randomQuestArr)
     })
     
     // getUniqueCharacters().then((uniqueCharArr) => {
@@ -55,48 +72,11 @@ export default function App() {
     //   console.log(uniqueCharArr)
     // })
   }, [])
-  // TODO UseEffect is loading twice!!!!
+  
+  console.log('q', questions)
 
-  // useEffect(() => {
-  //   let orderedAnsArr = [questions[currentQuestion].character]
-  //   console.log('iniitial', orderedAnsArr)
-  // }, [questions])
+  console.log('a', answers)
 
-  // useEffect(() => {
-  //   function ansArr(charArr) {
-  //     let orderedAnsArr = []
-  //     // console.log('iniitial', orderedAnsArr)
-
-  //     while (orderedAnsArr.length < 4) {
-  //       console.log(orderedAnsArr)
-
-  //       let r = charArr[Math.floor(Math.random() * charArr.length)]
-  //       if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
-  //     }
-  //     return orderedAnsArr.sort(() => Math.random() - 0.5)
-  //   }
-  //   setAnswers(ansArr)
-  // }, [currentQuestion])
-
-  // useEffect(() => {
-  //   function ansArr(charArr) {
-  //     let sourceAnswers = charArr
-  //     let orderedAnsArr = [questions[currentQuestion].character]
-  //     while (orderedAnsArr.length < ANSWER_NUM) {
-  //       console.log(orderedAnsArr)
-  //       let r = sourceAnswers[Math.floor(Math.random() * charArr.length)]
-  //       if (orderedAnsArr.indexOf(r) === -1) orderedAnsArr.push(r)
-  //     }
-  //     return orderedAnsArr.sort(() => Math.random() - 0.5)
-  //   }
-  //   getUniqueCharacters().then((charArr) => {
-  //     setAnswers(ansArr(charArr))
-  //   })
-  // }, [questions,currentQuestion])
-
-  // useEffect(()=>{
-  //   console.log('useEffect Hook ran',questions)
-  // },[questions])
 
   const handleAnswerClick = (answer, evt) => {
     setDisable(true)
@@ -157,7 +137,7 @@ export default function App() {
             </div>
           </div>
           <div className="answer-section">
-            {answers.map((answer, i) => (
+            {answers[currentQuestion].map((answer, i) => (
               <button
                 disabled={disable}
                 className={
